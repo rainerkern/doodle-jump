@@ -4,7 +4,7 @@ const platformLowestStartBottom = 100;
 const platformCount = 5;
 const platformFallSpeed = 4;
 const doodlerJumpSpeed = 25;
-const doodlerJumpHeight = 200;
+const doodlerJumpHeight = 240;
 const doodlerFallSpeed = 6;
 const doodlerHorizontalSpeed = 10
 const doodlerInitialBottom = 150;
@@ -15,7 +15,7 @@ const platforms = []
 let doodler
 ////////////////////////////////
 document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.querySelector('.grid');
+    const grid = document.querySelector('#grid');
     
     // create platforms
     for(let i=0; i < platformCount; i++) {
@@ -50,7 +50,7 @@ class Doodler {
         this.visual = document.createElement('div')
         this.jumpingStartPoint = bottom;
 
-        this.visual.classList.add('doodler');
+        this.visual.id = 'doodler';
         this.visual.style.left = this.left + 'px';
         this.visual.bottom = this.bottom + 'px';
 

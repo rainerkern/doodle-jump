@@ -1,15 +1,23 @@
-.grid {
+#grid {
     width: 400px;
     height: 600px;
     background-color: yellow;
     position: relative;
+    background-image: url("assets/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
 
-.doodler {
+#doodler {
     width: 60px;
     height: 85px;
-    background-color: red;
     position: absolute;
+    background-image: url("assets/player.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
 }
 
 .platform {
@@ -17,4 +25,8 @@
     height: 15px;
     background-color: green;
     position: absolute;
+    background-image: url("assets/platform.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 }
