@@ -27,31 +27,31 @@ document.addEventListener('DOMContentLoaded', () => {
         platforms.push(newPlatform)
     }
     
-    doodler = new Doodler(grid, doodlerInitialBottom, platforms[0].left)
+    doodler = new Doodler(grid, platforms[0].left)
    
     
     // Start Game TODO: attach button    
     window.addEventListener('keydown', doodler.control);
     window.addEventListener('keyup', doodler.control);
     console.log('Game Started')
-    doodler.jump()
 });
 
 
 class Doodler {
     jumpingStartPoint;
     
-    constructor(parent, bottom, left) {
-        this.bottom = bottom;
+    constructor(parent, left) {
+        this.bottom = doodlerInitialBottom;
         this.left = left;
         this.visual = document.createElement('div')
-        this.jumpingStartPoint = bottom;
+        this.jumpingStartPoint = this.bottom;
 
         this.visual.id = 'doodler';
         this.visual.style.left = this.left + 'px';
         this.visual.bottom = this.bottom + 'px';
 
         parent.appendChild(this.visual);
+        this.jump()
     }
 
     control(e) {
