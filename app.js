@@ -1,21 +1,23 @@
 ////////////////////////////////
 //     Game configuration     //
 const platformLowestStartBottom = 100;
-const platformCount = 5;
+// number of platforms on screen at the same time
+const platformCount = 5; 
 const platformFallSpeed = 4;
+const doodlerFallSpeed = 7;
 const doodlerJumpSpeed = 25;
 const doodlerJumpHeight = 240;
-const doodlerFallSpeed = 6;
 const doodlerHorizontalSpeed = 10
 const doodlerInitialBottom = 150;
 
 ////////////////////////////////
 //        Global State        //
 const platforms = []
-let doodler
+let doodler = null
+let grid = null
 ////////////////////////////////
 document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.querySelector('#grid');
+    grid = document.querySelector('#grid');
     
     // create platforms
     for(let i=0; i < platformCount; i++) {
@@ -28,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     doodler = new Doodler(grid, doodlerInitialBottom, platforms[0].left)
    
     
-
     // Start Game TODO: attach button    
     window.addEventListener('keydown', doodler.control);
     window.addEventListener('keyup', doodler.control);
@@ -38,10 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 class Doodler {
-    jumpTimer = null;
-    fallTimer = null;
-    leftTimerId = null;
-    rightTimerId = null;
     jumpingStartPoint;
     
     constructor(parent, bottom, left) {
@@ -144,15 +141,16 @@ class Doodler {
 class Platform {
     constructor(parent, newPlaformBottom) {
         this.bottom = newPlaformBottom;
+        // 315 = grid.width - platform.width
         this.left = Math.random() * 315
-        this.visual = document.createElement('div')
         this.parent = parent
+        this.visual = document.createElement('div')
+        parent.appendChild(this.visual);
         
         this.visual.classList.add('platform')
         this.visual.style.left = this.left + 'px'
         this.visual.style.bottom = this.bottom + 'px'
 
-        parent.appendChild(this.visual);
         this.startFalling()
     }
 
@@ -160,11 +158,12 @@ class Platform {
         this.fallTimer = setInterval(function () {
             // only move while doodler is above 200
             if (doodler.bottom <= 200) return
-            this.bottom -= platformFallSpeed;
+            this.bottom -= 5
             this.visual.style.bottom = this.bottom + 'px';
 
             // destroy platform when falling through bottom
-            if (this.bottom <= (0 - this.visual.style.height)) {
+            if (this.bottom <= 0) {
+                this.visual.parentNode.removeChild(this.visual);
                 platforms.shift()
                 console.log(platforms)
                 clearInterval(this.fallTimer)
