@@ -2,13 +2,14 @@
 //     Game configuration     //
 const platformLowestStartBottom = 100;
 // number of platforms on screen at the same time
-const platformCount = 5; 
+const platformCount = 6; 
 const platformFallSpeed = 4;
-const doodlerFallSpeed = 7;
+const doodlerFallSpeed = 9;
 const doodlerJumpSpeed = 25;
 const doodlerJumpHeight = 240;
 const doodlerHorizontalSpeed = 10
 const doodlerInitialBottom = 150;
+const gridHeight = 600
 
 ////////////////////////////////
 //        Global State        //
@@ -125,7 +126,7 @@ class Doodler {
             platforms.forEach(platform => {    
                 if (this.bottom >= platform.bottom
                     && this.bottom <= platform.bottom + 15
-                    && (this.left + 85) >= platform.left
+                    && (this.left + 60) >= platform.left
                     && this.left <= (platform.left + 85)
                     && this.jumpTimer == null
                 ) {
@@ -139,37 +140,44 @@ class Doodler {
 }
 
 class Platform {
+    fallSpeed = Math.random() * 1 + platformFallSpeed
+
     constructor(parent, newPlaformBottom) {
         this.bottom = newPlaformBottom;
         // 315 = grid.width - platform.width
-        this.left = Math.random() * 315
         this.parent = parent
         this.visual = document.createElement('div')
         parent.appendChild(this.visual);
         
         this.visual.classList.add('platform')
-        this.visual.style.left = this.left + 'px'
+        this.setRandomX()
         this.visual.style.bottom = this.bottom + 'px'
 
         this.startFalling()
     }
 
+    setRandomX() { 
+        this.left = Math.random() * 315
+    }
+
+    draw() {
+        this.visual.style.left = this.left + 'px'
+        this.visual.style.bottom = this.bottom + 'px';
+    }
+
     startFalling() {
         this.fallTimer = setInterval(function () {
             // only move while doodler is above 200
-            if (doodler.bottom <= 200) return
-            this.bottom -= 5
-            this.visual.style.bottom = this.bottom + 'px';
+            // if (doodler.bottom <= 200) return
+            this.bottom -= this.fallSpeed
 
             // destroy platform when falling through bottom
             if (this.bottom <= 0) {
-                this.visual.parentNode.removeChild(this.visual);
-                platforms.shift()
-                console.log(platforms)
-                clearInterval(this.fallTimer)
-                const newPlatform = new Platform(this.parent, 600)
-                platforms.push(newPlatform)
+                this.bottom = gridHeight - 15;
+                this.setRandomX()
             }
+
+            this.draw()
         }.bind(this), 30);
     }
 }
